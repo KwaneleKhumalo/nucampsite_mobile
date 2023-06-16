@@ -5,20 +5,16 @@ import * as Animatable from "react-native-animatable"
 import { useRef } from "react"
 
 const RenderCampsite = props => {
-  const { campsite } = props
+  const { campsite, onShowModal } = props
   const view = useRef()
+
+  const isRightSwipe = ({ dx }) => dx > 200
 
   const isLeftSwipe = ({ dx }) => dx < -200
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderEnd: (e, gestureState) => {
-      onPanResponderGrant: () => {
-        view.current.rubberBand(1000).then(endState => console.log(endState.finished ? "finished" : "canceled"))
-      }
-
-
-
       console.log("pan responder end", gestureState)
       if (isLeftSwipe(gestureState)) {
         Alert.alert(
@@ -37,9 +33,15 @@ const RenderCampsite = props => {
           ],
           { cancelable: false }
         )
+      } else if (isRightSwipe(gestureState)) {
+        onShowModal()
       }
+    },
+    onPanResponderGrant: () => {
+      view.current.rubberBand(1000).then(endState => console.log(endState.finished ? "finished" : "canceled"))
     }
   })
+
 
   if (campsite) {
     return (
