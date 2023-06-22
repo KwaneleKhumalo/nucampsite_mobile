@@ -18,7 +18,7 @@ import { fetchComments } from "../features/comments/commentsSlice"
 import ReservationScreen from "./ReservationScreen"
 import FavoritesScreen from "./FavoritesScreen"
 import LoginScreen from "./LoginScreen"
-
+import { getFocusedRouteNameFromRoute } from "@react-navigation/core"
 
 const Drawer = createDrawerNavigator()
 
@@ -139,15 +139,14 @@ const LoginNavigator = () => {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={({ navigation }) => ({
-          headerLeft: () => <Icon name="sign-in" type="font-awesome" iconStyle={styles.stackIcon} onPress={() => navigation.toggleDrawer()} />
+        options={({ navigation, route }) => ({
+          headerTitle: getFocusedRouteNameFromRoute(route),
+          headerLeft: () => <Icon name={getFocusedRouteNameFromRoute(route) === "Register" ? "user-plus" : "sign-in"} type="font-awesome" iconStyle={styles.stackIcon} onPress={() => navigation.toggleDrawer()} />
         })}
       />
     </Stack.Navigator>
   )
 }
-
-
 
 const CustomDrawerContent = props => (
   <DrawerContentScrollView {...props}>
@@ -176,7 +175,6 @@ const Main = () => {
   return (
     <View style={{ flex: 1, paddingTop: Platform.OS === "ios" ? 0 : Constants.statusBarHeight }}>
       <Drawer.Navigator drawerContent={CustomDrawerContent} initialRouteName="Home" drawerStyle={{ backgroundColor: "#CEC8FF" }}>
-        
         <Drawer.Screen
           name="Login"
           component={LoginNavigator}
