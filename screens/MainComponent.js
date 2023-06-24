@@ -174,9 +174,14 @@ const Main = () => {
   }, [dispatch])
 
   useEffect(() => {
-    NetInfo.fetch().then((connectionInfo) => {
-      Platform.OS === "ios" ? Alert.alert("Initial Network Connectivity Type:", connectionInfo.type) : ToastAndroid.show("Initial Network Connectivity Type: " + connectionInfo.type, ToastAndroid.LONG)
-    })
+    const showNetInfo = async () => {
+      await NetInfo.fetch().then(connectionInfo => {
+        Platform.OS === "ios" ? Alert.alert("Initial Network Connectivity Type:", connectionInfo.type) : ToastAndroid.show("Initial Network Connectivity Type: " + connectionInfo.type, ToastAndroid.LONG)
+      })
+    }
+
+    showNetInfo()
+
     const unsubscribeNetInfo = NetInfo.addEventListener(connectionInfo => {
       handleConnectivityChange(connectionInfo)
     })
@@ -201,7 +206,6 @@ const Main = () => {
     }
     Platform.OS === "ios" ? Alert.alert("Connection change:", connectionMsg) : ToastAndroid.show(connectionMsg, ToastAndroid.LONG)
   }
-
 
   return (
     <View style={{ flex: 1, paddingTop: Platform.OS === "ios" ? 0 : Constants.statusBarHeight }}>
