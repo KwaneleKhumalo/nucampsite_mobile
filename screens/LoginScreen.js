@@ -104,8 +104,8 @@ const RegisterTab = () => {
     }
   }
 
-  const processImage = async imgUri => {
-    const processedImage = await ImageManipulator.manipulateAsync(imageUrl.localUri, [{ resize: { width: imgUri.width * 400 } }], { compress: 1, format: ImageManipulator.SaveFormat.PNG })
+  const processImage = async (imgUri) => {
+    const processedImage = await ImageManipulator.manipulateAsync(imgUri, [{ resize: { width: 400 } }], { compress: 1, format: ImageManipulator.SaveFormat.PNG })
     console.log(processedImage)
     setImageUrl(processedImage)
   }
